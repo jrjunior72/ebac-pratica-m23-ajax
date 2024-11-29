@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Github</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img id="avatar" class="profile-avatar" src="https://via.placeholder.com/180x180" alt=".">
+            <h1 id="nome" class="profile-name"></h1>
+            <h2 id="usuario" class="profile-username"></h2>
+            <ul class="numbers">
+                <li class="numbers-item">
+                    <h4>Repositórios</h4>
+                    <span id="repositorios"></span>
+                </li>
+                <li class="numbers-item">
+                    <h4>Seguidores</h4>
+                    <span id="seguidores"></span>
+                </li>
+                <li class="numbers-item">
+                    <h4>Seguindo</h4>
+                    <span id="seguindo"></span>
+                </li>
+            </ul>
+            <a href="#" id="link" class="profile-link">Ver no Github</a>
+        </div>
+    </header>
+    <script src="jquery.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            const usr = "jrjunior72";
+            const endpoint = `https://api.github.com/users/${usr}`;
+
+            fetch(endpoint)
+                .then(function(resposta) {
+                    if (!resposta.ok) { 
+                        throw new Error('Erro na requisição'); 
+                    }
+                    return resposta.json();
+                }) 
+                .then(function(json) {
+                    console.log(json);
+                    const avatarElement = json.avatar_url;
+                    const nameElement = json.name;
+                    const userElement = json.login;
+                    const reposElement = json.public_repos;
+                    const followersElement = json.followers;
+                    const followingElement = json.following;
+                    const linkElement = json.html_url;
+
+                    // if (json.avatar_url) { $('#avatar').attr("src", json.avatar_url); } 
+                    // if (json.name) { $('#nome').html(json.name); } 
+                    // if (json.login) { $('#usuario').html(json.login); } 
+                    // if (json.public_repos) { $('#repositorios').html(json.public_repos); } 
+                    // if (json.followers) { $('#seguidores').html(json.followers); } 
+                    // if (json.following) { $('#seguindo').html(json.following); } 
+                    // if (json.html_url) { $('#link').attr("href", json.html_url); }
+
+                    $('#avatar').attr("src", avatarElement);
+                    $('#nome').html(nameElement); 
+                    $('#usuario').html(userElement); 
+                    $('#repositorios').html(reposElement);
+                    $('#seguindo').html(followingElement);
+                    $('#seguidores').html(followersElement);
+                    $('#link').attr("href", linkElement);//quando é passado um parâmetro, esse é o valor que será inserido no campo
+                })
+
+                .catch(function(erro) {
+                    console.log("Erro:", erro);
+                    alert("Ocorreu um erro ao buscar as informações no GitHub, tente novamente mais tarde.")
+                })
+        
+                // .finally(function() {
+
+                // })
+        })
+    </script>
+</body>
+</html>
